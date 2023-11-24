@@ -377,25 +377,33 @@ export class ChatGPTAPI {
 
     const systemMessageOffset = messages.length
 
-    let nextMessages = messages;
+    let nextMessages = messages
     if (text && opts.withImages) {
-      const content: types.openai.ChatCompletionRequestMessage["content"] = [{ type: "text", text }];
-      content.concat(opts.withImages.map(image => ({
-                      type: "image_url",
-                      image_url: { url: image },
-                    })))
-      nextMessages = messages.concat([{
-            role: 'user',
-            name: opts.name,
-            content,
-      }])
+      let content: types.openai.ChatCompletionRequestMessage['content'] = [
+        { type: 'text', text }
+      ]
+      content = content.concat(
+        opts.withImages.map((image) => ({
+          type: 'image_url',
+          image_url: { url: image }
+        }))
+      )
+      nextMessages = messages.concat([
+        {
+          role: 'user',
+          name: opts.name,
+          content
+        }
+      ])
     } else if (text) {
-      nextMessages = messages.concat([{
-            role: 'user',
-            content: text,
-            name: opts.name
-      }])
-    } 
+      nextMessages = messages.concat([
+        {
+          role: 'user',
+          content: text,
+          name: opts.name
+        }
+      ])
+    }
 
     let numTokens = 0
 
