@@ -35,6 +35,7 @@ export type ChatGPTAPIOptions = {
 }
 
 export type SendMessageOptions = {
+  withImages?: string[]
   /** The name of a user in a multi-user chat. */
   name?: string
   parentMessageId?: string
@@ -224,7 +225,17 @@ export namespace openai {
      * @type {string}
      * @memberof ChatCompletionRequestMessage
      */
-    content: string
+    content: string | Array<{
+                        type: "text",
+                        text: string,
+                      } | {
+                        type: "image_url",
+                        image_url: {
+                          url: string;
+                          detail?: "low" | "high" | "auto"
+                        }
+                      }>;
+
     /**
      * The name of the user in a multi-user chat
      * @type {string}
